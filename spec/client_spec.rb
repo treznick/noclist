@@ -28,7 +28,7 @@ RSpec.describe Client do
 
       users_stub = stub_request(:get, [Client::URL, Client::USERS_PATH].join('')).with(headers: { Client::CHECKSUM_HEADER_KEY => checksum }).to_return(body: user_ids)
 
-      expect(Client.run).to eq(JSON.dump(output_json))
+      expect(Client.run).to eq(output_json)
 
       expect(auth_stub).to have_been_requested
       expect(users_stub).to have_been_requested
