@@ -7,4 +7,5 @@ gem "excon"
 group :test do
   gem "rspec"
   gem "webmock"
+  gem "byebug"
 end
