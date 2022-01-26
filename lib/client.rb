@@ -52,7 +52,6 @@ class Client
   end
 
   def get_users_json
-    user_ids = execute_users_request.body.split("\n")
-    JSON.dump(user_ids)
+    execute_users_request.body.split("\n")
   end
 end
