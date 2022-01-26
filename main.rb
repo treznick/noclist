@@ -3,3 +3,4 @@
 require_relative 'lib/client'
 
 Client.run
+exit 0

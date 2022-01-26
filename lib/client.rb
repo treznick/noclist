@@ -22,7 +22,6 @@ class Client
     get_auth_token
     compute_checksum
     get_users_json
-    exit 0
   end
 
   def self.run
@@ -55,6 +54,6 @@ class Client
 
   def get_users_json
     user_ids = execute_users_request.body.split("\n")
-    puts JSON.dump(user_ids)
+    JSON.dump(user_ids)
   end
 end
