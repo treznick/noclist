@@ -1,12 +1,10 @@
 # frozen_string_literal: true
 
-require 'json'
 require 'digest'
 require 'excon'
+require_relative './retry'
 
 class Client
-  class RetryError < StandardError; end
-
   URL = "http://0.0.0.0:8888"
   AUTH_PATH = "/auth"
   USERS_PATH = "/users"
@@ -23,7 +21,6 @@ class Client
     get_auth_token
     compute_checksum
     get_users_json
-    exit 0
   end
 
   def self.run
@@ -43,45 +40,18 @@ class Client
   end
 
   def execute_get_auth_request
-    with_retries do
+    Retry.with_retries do
       connection.get(path: AUTH_PATH)
     end
   end
 
   def execute_users_request
-    with_retries do
+    Retry.with_retries do
       connection.get(path: USERS_PATH, headers: { CHECKSUM_HEADER_KEY => checksum } )
     end
   end
 
   def get_users_json
-    user_ids = execute_users_request.body.split("\n")
-    puts JSON.dump(user_ids)
-  end
-
-  def with_retries
-    attempts = 0
-    begin
-      attempts += 1
-      response = yield
-      if response.status == 200
-        response
-      elsif attempts > 2
-        exit 1
-      else
-        raise RetryError
-      end
-    rescue RetryError
-      retry
-    rescue StandardError => e
-      require 'byebug'; byebug
-      if attempts > 2
-        exit 1
-      else
-        retry
-      end
-    end
+    execute_users_request.body.split("\n")
   end
 end
-
-Client.run
