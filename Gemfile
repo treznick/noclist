@@ -3,3 +3,7 @@
 source "https://rubygems.org"
 
 gem "excon"
+
+group :test do
+  gem "rspec"
+end
