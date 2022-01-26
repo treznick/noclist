@@ -1,3 +1,9 @@
+# frozen_string_literal: true
+
+require 'json'
+require 'digest'
+require 'excon'
+
 class Client
   class RetryError < StandardError; end
 
